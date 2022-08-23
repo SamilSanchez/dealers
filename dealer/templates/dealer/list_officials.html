@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Lista de Oficiales</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Lista de Oficiales</h1>
+
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8 mt-5">
+                <h2> OFICIALES </h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">CÓDIGO</th>
+                        <th scope="col">NOMBRE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+ 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+        <script>
+
+            fetch("http://127.0.0.1:8000/api/officials")
+            .then(response => response.json())
+            .then(dealers => {
+                console.log(dealers);
+                let inputTBody = document.getElementById("tbody");
+                let listOfficials = "";
+
+                dealers.forEach(data => {
+                    listOfficials += `
+                    <tr>
+                        <th scope="row"> ${ data.code }</th>
+                        <td>${ data.name }</td>
+                    </tr>
+                    `
+                });
+                inputTBody.innerHTML = listOfficials;
+            })
+            .catch(error => console.log(error))
+
+        </script>
+    </body>
+</html>

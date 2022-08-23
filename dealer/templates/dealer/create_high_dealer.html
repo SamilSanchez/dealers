@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Asignacion de oficial a dealer</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8 mt-5">
+                <h1>ASIGNACIÓN DE OFICIAL A UN DEALER</h1>
+
+                <p>
+                    Completa la información y darle al botón enviar para la asignación.
+                </p>
+                <form id="create_dealer" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                    <label for="dealer" class="form-label"> DEALER</label>
+                    <select name="dealer" id="dealer" class="form-control" aria-describedby="dealerHelp">
+                        <option value="">Seleccione</option>
+                    </select>                        
+                    <div id="dealerHelp" class="form-text">Dealer a asignar</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="official" class="form-label">Oficial</label>
+                        <select name="official" id="official" class="form-control" aria-describedby="officialHelp">
+                            <option value="">Seleccione</option>
+                        </select>                        
+                        <div id="officialHelp" class="form-text">Oficial a asignar</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Estado</label>
+                        <select name="status" id="status" class="form-control" aria-describedby="statusHelp">
+                            <option value="in_revision">En Revision</option>
+                            <option value="accept">Aprobar</option>
+                            <option value="reject">Rechazar</option>
+                        </select>
+                        <div id="statusHelp" class="form-text">Estado de la solicitud</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+        <script>
+            let inputFormDealer = document.getElementById("create_dealer");
+
+            fetch("http://127.0.0.1:8000/api/dealers")
+            .then(response => response.json())
+            .then(dealers => {
+                console.log(dealers);
+                let inputSelectDealer = document.getElementById("dealer");
+                let listDealers = "";
+
+                dealers.forEach(data => {
+                    listDealers += `
+                        <option value="${ data.id }">RNC: ${ data.rnc } / ${ data.name }</option>
+                    `
+                });
+                inputSelectDealer.innerHTML = listDealers;
+            })
+            .catch(error => console.log(error))
+
+            fetch("http://127.0.0.1:8000/api/officials")
+            .then(response => response.json())
+            .then(officials => {
+                console.log(officials);
+                let inputSelectOfficial = document.getElementById("official");
+                let listOfficials = "";
+
+                officials.forEach(data => {
+                    listOfficials += `
+                    <option value="${ data.id }">Código: ${ data.code } / ${ data.name }</option>
+                    `
+                });
+                inputSelectOfficial.innerHTML = listOfficials;
+            })
+            .catch(error => console.log(error))
+
+
+            inputFormDealer.addEventListener("submit", (e) => {
+                e.preventDefault();
+                let form = e.target;
+                const data = {
+                    "rnc": form.elements.rnc.value,
+                    "name": form.elements.dealer.value,
+                    "direction": form.elements.direction.value,
+                    "phone": form.elements.phone.value,
+                    "email": form.elements.email.value,
+                }
+
+                const url = "http://127.0.0.1:8000/api/dealers/";
+
+                const options = {
+                    method: "POST",
+                    body: JSON.stringify(data), // data can be `string` or {object}!
+                    headers:{
+                        "Content-Type": "application/json"
+                    }
+                }
+
+                fetch(url, options)
+                .then(response => response.json())
+                .then(newDealer => {
+                    console.log(newDealer);
+                    window.location.href = "http://127.0.0.1:8000/portal/dealers";
+                })
+                .catch(error => console.log(error))
+
+            });
+        </script>
+    </body>
+</html>
