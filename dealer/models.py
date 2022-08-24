@@ -22,9 +22,8 @@ class Official(models.Model):
 
 
 STATUS_DEALER = [
-    ("in_revision", 'En revision'),
-    ("accept", 'Aprobado'),
-    ("reject", 'Rechazado'),
+    ("accept", 'Aprobar'),
+    ("reject", 'Rechazar'),
 ]
 
 class AcceptDealer(models.Model):
@@ -34,7 +33,6 @@ class AcceptDealer(models.Model):
     status = models.CharField(
         max_length=11,
         choices=STATUS_DEALER,
-        default="in_revision",
     )
 
     def __str__(self) -> str:

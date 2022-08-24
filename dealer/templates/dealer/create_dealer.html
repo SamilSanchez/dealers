@@ -28,6 +28,7 @@
                 <p>
                     Completa la información y darle al botón enviar para crear el dealer.
                 </p>
+                <div id="message_error"></div>
                 <form id="create_dealer" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -95,7 +96,12 @@
                     console.log(newDealer);
                     window.location.href = "http://127.0.0.1:8000/portal/dealers";
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    console.log(error);
+                    let inputError = document.getElementById("message_error");
+                    inputError.classList.add("btn-danger");
+                    inputError.innerText = `Ha ocurrido un error: <${error}>`;
+                })
 
             });
         </script>

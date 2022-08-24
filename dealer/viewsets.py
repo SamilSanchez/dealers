@@ -1,5 +1,5 @@
 
-from dealer.serializers import DealerSerializer, OfficialSerializer, AcceptDealerSerializer
+from dealer.serializers import DealerSerializer, GetAcceptDealerSerializer, OfficialSerializer, PostAcceptDealerSerializer
 from dealer.models import Dealer, Official, AcceptDealer
 from rest_framework import viewsets
 
@@ -16,4 +16,10 @@ class OfficialViewSet(viewsets.ModelViewSet):
 
 class AcceptDealerViewSet(viewsets.ModelViewSet):
     queryset = AcceptDealer.objects.all()
-    serializer_class = AcceptDealerSerializer
+    serializer_class = GetAcceptDealerSerializer
+
+
+class CreateAcceptDealerViewSet(viewsets.ModelViewSet):
+    queryset = AcceptDealer.objects.all()
+    serializer_class = PostAcceptDealerSerializer
+
